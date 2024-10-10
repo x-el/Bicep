@@ -64,8 +64,9 @@ var imageReference = {
     version: 'latest'
   }
 }
-var publicIPAddressName = '${vmName}PublicIP'
-var networkInterfaceName = '${vmName}NetInt'
+var publicIPAddressName = '${vmName}-PublicIP'
+var networkInterfaceName = '${vmName}-VNIC'
+var osDiskName = '${vmName}-OsDisk'
 var osDiskType = 'Standard_LRS'
 var linuxConfiguration = {
   disablePasswordAuthentication: true
@@ -154,6 +155,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
         managedDisk: {
           storageAccountType: osDiskType
         }
+        name: osDiskName
       }
       imageReference: imageReference[ubuntuOSVersion]
     }
