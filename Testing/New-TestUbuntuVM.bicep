@@ -1,6 +1,9 @@
 @description('The name of the target Resource Group.')
 param resourceGroupName string = 'Test-Learn-PS-WE'
 
+@description('The name of the network infrastructure Resource Group.')
+param networkResourceGroupName string = 'Test-Core-Net-WE'
+
 @description('The name of your Virtual Machine.')
 param vmName string = 'UbuntuVM'
 
@@ -37,9 +40,6 @@ param vmSize string = 'Standard_B2s'
 @description('Name of the VNET')
 param virtualNetworkName string = 'Test-WE-VNet01'
 
-@description('Name of the subnet in the virtual network')
-param subnetName string = 'Test-WE-VNet01-Subnet02'
-
 @description('Name of the Network Security Group')
 param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
@@ -67,8 +67,6 @@ var imageReference = {
 var publicIPAddressName = '${vmName}PublicIP'
 var networkInterfaceName = '${vmName}NetInt'
 var osDiskType = 'Standard_LRS'
-var subnetAddressPrefix = '10.1.0.0/24'
-var addressPrefix = '10.1.0.0/16'
 var linuxConfiguration = {
   disablePasswordAuthentication: true
   ssh: {
@@ -93,6 +91,32 @@ var extensionVersion = '1.0'
 var maaTenantName = 'GuestAttestation'
 var maaEndpoint = substring('emptystring', 0, 0)
 
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' existing = {
+  name: virtualNetworkName
+  scope: resourceGroup(networkResourceGroupName)
+}
+
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-09-01' existing = {
+  name: networkSecurityGroupName
+  scope: resourceGroup(networkResourceGroupName)
+}
+
+resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+  name: publicIPAddressName
+  location: location
+  sku: {
+    name: 'Basic'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Dynamic'
+    publicIPAddressVersion: 'IPv4'
+    dnsSettings: {
+      domainNameLabel: dnsLabelPrefix
+    }
+    idleTimeoutInMinutes: 4
+  }
+}
+
 resource networkInterface 'Microsoft.Network/networkInterfaces@2023-09-01' = {
   name: networkInterfaceName
   location: location
@@ -114,66 +138,6 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-09-01' = {
     networkSecurityGroup: {
       id: networkSecurityGroup.id
     }
-  }
-}
-
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-09-01' = {
-  name: networkSecurityGroupName
-  location: location
-  properties: {
-    securityRules: [
-      {
-        name: 'SSH'
-        properties: {
-          priority: 1000
-          protocol: 'Tcp'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceAddressPrefix: '*'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22'
-        }
-      }
-    ]
-  }
-}
-
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' = {
-  name: virtualNetworkName
-  location: location
-  properties: {
-    addressSpace: {
-      addressPrefixes: [
-        addressPrefix
-      ]
-    }
-    subnets: [
-      {
-        name: subnetName
-        properties: {
-          addressPrefix: subnetAddressPrefix
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-        }
-      }
-    ]
-  }
-}
-
-resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
-  name: publicIPAddressName
-  location: location
-  sku: {
-    name: 'Basic'
-  }
-  properties: {
-    publicIPAllocationMethod: 'Dynamic'
-    publicIPAddressVersion: 'IPv4'
-    dnsSettings: {
-      domainNameLabel: dnsLabelPrefix
-    }
-    idleTimeoutInMinutes: 4
   }
 }
 
