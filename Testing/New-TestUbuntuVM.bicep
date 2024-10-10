@@ -105,6 +105,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-09-0
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
   name: publicIPAddressName
   location: location
+  tags: resourceGroup().tags
   sku: {
     name: 'Basic'
   }
@@ -145,6 +146,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-09-01' = {
 resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
   name: vmName
   location: location
+  tags: resourceGroup().tags
   properties: {
     hardwareProfile: {
       vmSize: vmSize
