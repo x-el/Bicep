@@ -1,5 +1,8 @@
+@description('The name of the target Resource Group.')
+param resourceGroupName string = 'Test-Learn-PS-WE'
+
 @description('The name of your Virtual Machine.')
-param vmName string = 'simpleLinuxVM'
+param vmName string = 'UbuntuVM'
 
 @description('Username for the Virtual Machine.')
 param adminUsername string
@@ -29,16 +32,16 @@ param ubuntuOSVersion string = 'Ubuntu-2204'
 param location string = resourceGroup().location
 
 @description('The size of the VM')
-param vmSize string = 'Standard_D2s_v3'
+param vmSize string = 'Standard_B2s'
 
 @description('Name of the VNET')
-param virtualNetworkName string = 'vNet'
+param virtualNetworkName string = 'Test-WE-VNet01'
 
 @description('Name of the subnet in the virtual network')
-param subnetName string = 'Subnet'
+param subnetName string = 'Test-WE-VNet01-Subnet02'
 
 @description('Name of the Network Security Group')
-param networkSecurityGroupName string = 'SecGroupNet'
+param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
 @description('Security Type of the Virtual Machine.')
 @allowed([
