@@ -1,6 +1,7 @@
 // CUSTOM DATA TYPES
 
 type websiteConfigurationSettingsType = {
+  
   awesomeFeatureEnabled: bool
 
   @description('Between 1 and 5 features only.')
