@@ -35,6 +35,7 @@ var aspTier = environmentName == 'prod' ? 'S1' : 'F1'
 resource serverFarm 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: '${resourceName}-${environmentName}'
   location: resourceLocation
+  tags: resourceGroup().tags
   sku:{
     name: aspTier // F1 or S1
   }
@@ -43,6 +44,7 @@ resource serverFarm 'Microsoft.Web/serverfarms@2023-12-01' = {
 resource website 'Microsoft.Web/sites@2023-12-01' = {
   name: 'resourceName-hb-${environmentName}'
   location: resourceLocation
+  tags: resourceGroup().tags
   // dependsOn: [ serverFarm ]
   properties: {
     serverFarmId:serverFarm.id
