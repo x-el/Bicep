@@ -6,4 +6,3 @@ param websiteConfigurationSettings = {
   awesomeFeatureDisplayName: 'Feature Two'
   awesomeFeatureEnabled: true
 }
-

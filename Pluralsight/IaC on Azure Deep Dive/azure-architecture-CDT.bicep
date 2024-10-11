@@ -13,6 +13,7 @@ type websiteConfigurationSettingsType = {
   @minLength(5)
   @maxLength(25)
   awesomeFeatureDisplayName: string
+  
 }
 
 
