@@ -20,10 +20,13 @@ param awesomeFeatureCount int = 2 // supplied a default value for this parameter
 param awesomeFeatureDisplayName string
 
 
+
 // VARIABLES
 
 var companyName = 'ASPFA'
 var resourceName = '${companyName}-CompanyPortal'
+var resourceLocation = resourceGroup().location
+var aspTier = environmentName == 'prod' ? 'S1' : 'F1'
 
 
 
@@ -31,15 +34,15 @@ var resourceName = '${companyName}-CompanyPortal'
 
 resource serverFarm 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: '${resourceName}-${environmentName}'
-  location: 'westeurope'
+  location: resourceLocation
   sku:{
-    name: 'S1'
+    name: aspTier // F1 or S1
   }
 }
 
 resource website 'Microsoft.Web/sites@2023-12-01' = {
-  name: '${resourceName}-hb-${environmentName}'
-  location: 'westeurope'
+  name: 'resourceName-hb-${environmentName}'
+  location: resourceLocation
   // dependsOn: [ serverFarm ]
   properties: {
     serverFarmId:serverFarm.id
