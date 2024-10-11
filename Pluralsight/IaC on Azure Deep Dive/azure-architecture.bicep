@@ -27,6 +27,8 @@ var companyName = 'ASPFA'
 var resourceName = '${companyName}-CompanyPortal'
 var resourceLocation = resourceGroup().location
 var aspTier = environmentName == 'prod' ? 'S1' : 'F1'
+// var aFeatureEven = awesomeFeatureCount % 2 == 0
+// var calculatedAwFeEnabled = awesomeFeatureEnabled && aFeatureEven
 
 
 
@@ -58,6 +60,22 @@ resource websiteSettings 'Microsoft.Web/sites/config@2023-12-01' = {
     enableAwesomeFeature: string(awesomeFeatureEnabled) // string cast required as it's the only type accepted by the properties
     awesomeFeatureCount: string(awesomeFeatureCount)
     awesomeFeatureDisplayName: awesomeFeatureDisplayName
+  }
+}
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
+  name: 'aspfa-test-learn-ps-we-law'
+  scope: resourceGroup(subscription().subscriptionId,'Test-Learn-PS-WE')
+}
+
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: '${resourceName}-${environmentName}-AppIn'
+  location: resourceLocation
+  kind: 'web'
+  tags: resourceGroup().tags
+  properties: {
+      Application_Type: 'web'
+      WorkspaceResourceId: logAnalyticsWorkspace.id
   }
 }
 
