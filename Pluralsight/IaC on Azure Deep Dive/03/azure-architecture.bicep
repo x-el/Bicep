@@ -42,17 +42,6 @@ module applicationInsightsModule 'modules/applicationInsights.bicep' = {
     }
 }
 
-module sqlDatabaseModule 'modules/sqlDatabase.bicep' = {
-name: 'sqlDatabaseDeployment'
-params: {
-  environmentName: environmentName
-  resourceLocation: resourceLocation
-  companyName: companyName
-  adminManagedIdentityName: appServiceModule.outputs.websiteManagedIdentityName
-  adminManagedIdentityClientId: appServiceModule.outputs.websiteManagedIdentityClientId
-  }
-}
-
 module appServiceModule 'modules/appService.bicep' = {
   name: 'appServiceDeploment'
   params: {
@@ -61,6 +50,17 @@ module appServiceModule 'modules/appService.bicep' = {
     resourceName: resourceName
     environmentName: environmentName
     websiteConfigurationSettings: websiteConfigurationSettings
+  }
+}
+
+module sqlDatabaseModule 'modules/sqlDatabase.bicep' = {
+name: 'sqlDatabaseDeployment'
+params: {
+  environmentName: environmentName
+  resourceLocation: resourceLocation
+  companyName: companyName
+  adminManagedIdentityName: appServiceModule.outputs.websiteManagedIdentityName
+  adminManagedIdentityClientId: appServiceModule.outputs.websiteManagedIdentityClientId
   }
 }
 
