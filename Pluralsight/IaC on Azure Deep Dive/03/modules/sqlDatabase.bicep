@@ -13,6 +13,7 @@ param adminManagedIdentityClientId string
 resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
   name: '${companyName}-SqlServer-${environmentName}'
   location: resourceLocation
+  tags: resourceGroup().tags
   properties: {
     administrators: {
       administratorType: 'ActiveDirectory'
@@ -27,6 +28,7 @@ resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
   name: '${companyName}-Database'
   location: resourceLocation
+  tags: resourceGroup().tags
   sku: {
     name: 'Basic'
   }
