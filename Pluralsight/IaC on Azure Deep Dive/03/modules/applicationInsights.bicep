@@ -46,7 +46,7 @@ resource metricsPublisherRoleDefinition 'Microsoft.Authorization/roleDefinitions
   name: metricsPublisherWellKnownId // Azure well-known GUID (available in the Microsoft Documentation)
 }
 
-resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01'{ // Creating Extension Resource
+resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = { // Creating Extension Resource
   scope: applicationInsights // The containing Resource from within the template that the created ER will apply to
   name: guid(applicationInsights.name, metricsPublisherPrincipalId, metricsPublisherRoleDefinition.id) // always needs to be a GUID; using the guid function to generate one: resource it is applied to, the Principal that it's given to, which Role is it given 
   properties: {
