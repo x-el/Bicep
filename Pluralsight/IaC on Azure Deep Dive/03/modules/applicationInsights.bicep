@@ -6,6 +6,21 @@ param resourceLocation string
 
 
 
+// VARIABLES
+
+var metricDetails = [
+  {
+    metricName: 'Failed Requests'
+    metricIdentifier: 'requests/failed'
+  }
+  {
+    metricName: 'Failed Dependencies'
+    metricIdentifier: 'dependencies/failed'
+  }
+]
+
+
+
 // RESOURCES
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {

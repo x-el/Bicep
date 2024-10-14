@@ -35,6 +35,7 @@ type websiteConfigurationSettingsType = {
 resource websiteManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'websiteManagedIdentity'
   location: resourceLocation
+  tags: resourceGroup().tags
 }
 
 resource serverFarm 'Microsoft.Web/serverfarms@2023-12-01' = {
@@ -77,4 +78,4 @@ resource websiteSettings 'Microsoft.Web/sites/config@2023-12-01' = {
 // OUTPUTS
 
 output websiteManagedIdentityName string = websiteManagedIdentity.name
-output websiteManagedIdentityClientId string = websiteManagedIdentity.id
+output websiteManagedIdentityClientId string = websiteManagedIdentity.properties.clientId  // websiteManagedIdentity.id is incorrect

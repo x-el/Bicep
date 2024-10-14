@@ -19,8 +19,8 @@ resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
       administratorType: 'ActiveDirectory'
       azureADOnlyAuthentication: true
       login: adminManagedIdentityName
-      //sid: adminManagedIdentityClientId
-      sid: '758ef29e-8134-453a-831d-e69f37b9e603' // manually specifying the UAMI Client ID
+      sid: adminManagedIdentityClientId
+      // sid: '758ef29e-8134-453a-831d-e69f37b9e603' // manually specifying the UAMI Client ID
       // sid: '61b921d7-f38d-4947-9dc7-9ba1e9472560' // manually specifying the UAMI Object (principal) ID
       tenantId: subscription().tenantId
     }
