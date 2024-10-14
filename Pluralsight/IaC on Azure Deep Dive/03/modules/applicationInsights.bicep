@@ -3,6 +3,7 @@
 param resourceName string
 param environmentName string
 param resourceLocation string
+param metricsPublisherPrincipalId string
 
 
 
@@ -18,6 +19,8 @@ var metricDetails = [
     metricIdentifier: 'dependencies/failed'
   }
 ]
+
+var metricsPublisherWellKnownId = '3913510d-42f4-4e42-8a64-420c390055eb' 
 
 
 
@@ -36,6 +39,19 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   properties: {
       Application_Type: 'web'
       WorkspaceResourceId: logAnalyticsWorkspace.id
+  }
+}
+
+resource metricsPublisherRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: metricsPublisherWellKnownId // Azure well-known GUID (available in the Microsoft Documentation)
+}
+
+resource monitoringMetricsPublisherRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01'{ // Creating Extension Resource
+  scope: applicationInsights // The containing Resource from within the template that the created ER will apply to
+  name: guid(applicationInsights.name, metricsPublisherPrincipalId, metricsPublisherRoleDefinition.id) // always needs to be a GUID; using the guid function to generate one: resource it is applied to, the Principal that it's given to, which Role is it given 
+  properties: {
+    principalId: metricsPublisherPrincipalId
+    roleDefinitionId: metricsPublisherRoleDefinition.id // resource ID of a Role Definition
   }
 }
 

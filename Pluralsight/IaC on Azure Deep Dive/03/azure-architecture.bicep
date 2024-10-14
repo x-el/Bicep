@@ -39,6 +39,7 @@ module applicationInsightsModule 'modules/applicationInsights.bicep' = {
       environmentName: environmentName
       resourceLocation: resourceLocation
       resourceName: resourceName
+      metricsPublisherPrincipalId: appServiceModule.outputs.websiteManagedIdentityPrincipalId
     }
 }
 
