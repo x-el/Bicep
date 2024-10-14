@@ -52,6 +52,16 @@ module applicationInsightsModule 'modules/applicationInsights.bicep' = {
     }
 }
 
+module sqlDatabaseModule 'modules/sqlDatabase.bicep' = {
+name: 'sqlDatabaseDeployment'
+params: {
+  environmentName: environmentName
+  resourceLocation: resourceLocation
+  companyName: companyName
+  adminManagedIdentityName: websiteManagedIdentity.name 
+  adminManagedIdentityClientId: websiteManagedIdentity.id
+  }
+}
 
 
 
@@ -60,28 +70,6 @@ module applicationInsightsModule 'modules/applicationInsights.bicep' = {
 resource websiteManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'websiteManagedIdentity'
   location: resourceLocation
-}
-
-resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
-  name: '${companyName}-SqlServer-${environmentName}'
-  location: resourceLocation
-  properties: {
-    administrators: {
-      administratorType: 'ActiveDirectory'
-      azureADOnlyAuthentication: true
-      login: websiteManagedIdentity.name
-      sid: websiteManagedIdentity.properties.clientId
-      tenantId: subscription().tenantId
-    }
-  }
-}
-
-resource sqlDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
-  name: '${companyName}-Database'
-  location: resourceLocation
-  sku: {
-    name: 'Basic'
-  }
 }
 
 resource serverFarm 'Microsoft.Web/serverfarms@2023-12-01' = {
