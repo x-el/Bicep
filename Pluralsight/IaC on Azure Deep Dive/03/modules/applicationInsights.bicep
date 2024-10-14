@@ -39,30 +39,61 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource failureAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (environmentName == 'prod') {
-  name: 'Rule for Failed Requests'
-  location: 'global'
-  properties: {
-    severity: 3
-    enabled: true
-    evaluationFrequency: 'PT5M'
-    windowSize: 'PT5M'
-    scopes: [
-      applicationInsights.id
-    ]
-    criteria: {
-      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
-      allOf: [
-        {
-          threshold: 1
-          name: 'Failed Requests'
-          metricNamespace: 'microsoft.insights/components'
-          metricName: 'requests/failed'
-          operator: 'GreaterThan'
-          timeAggregation: 'Count'
-          criterionType: 'StaticThresholdCriterion'
-        }
+resource failureAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = [ for metricDetail in metricDetails: if (environmentName == 'prod') {
+    name: 'Rule for ${metricDetail.metricName}'
+    location: 'global'
+    properties: {
+      severity: 3
+      enabled: true
+      evaluationFrequency: 'PT5M'
+      windowSize: 'PT5M'
+      scopes: [
+        applicationInsights.id
       ]
+      criteria: {
+        'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+        allOf: [
+          {
+            threshold: 1
+            name: metricDetail.metricName
+            metricNamespace: 'microsoft.insights/components'
+            metricName: metricDetail.metricIdentifier
+            operator: 'GreaterThan'
+            timeAggregation: 'Count'
+            criterionType: 'StaticThresholdCriterion'
+          }
+        ]
+      }
     }
   }
-}
+]
+
+/*
+  resource failureAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (environmentName == 'prod') {
+    name: 'Rule for Failed Requests'
+    location: 'global'
+    properties: {
+      severity: 3
+      enabled: true
+      evaluationFrequency: 'PT5M'
+      windowSize: 'PT5M'
+      scopes: [
+        applicationInsights.id
+      ]
+      criteria: {
+        'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+        allOf: [
+          {
+            threshold: 1
+            name: 'Failed Requests'
+            metricNamespace: 'microsoft.insights/components'
+            metricName: 'requests/failed'
+            operator: 'GreaterThan'
+            timeAggregation: 'Count'
+            criterionType: 'StaticThresholdCriterion'
+          }
+        ]
+      }
+    }
+  }
+*/
