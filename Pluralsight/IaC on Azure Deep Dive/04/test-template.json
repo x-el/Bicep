@@ -1,0 +1,640 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
+        },
+        "servers_aspfa_sqlserver_test_name": {
+            "defaultValue": "aspfa-sqlserver-test",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[parameters('servers_aspfa_sqlserver_test_name')]",
+            "location": "westeurope",
+            "tags": {
+                "Environment": "Test",
+                "Location": "West Europe",
+                "Organization": "SAT PFA",
+                "Project": "PluralSight",
+                "Purpose": "Learning"
+            },
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "CloudSAb0ac319b",
+                "version": "12.0",
+                "minimalTlsVersion": "None",
+                "publicNetworkAccess": "Enabled",
+                "administrators": {
+                    "administratorType": "ActiveDirectory",
+                    "principalType": "Group",
+                    "login": "websiteManagedIdentity",
+                    "sid": "758ef29e-8134-453a-831d-e69f37b9e603",
+                    "tenantId": "5f50d5ca-3903-4a05-abb5-28f509b56b3c",
+                    "azureADOnlyAuthentication": true
+                },
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/administrators",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ActiveDirectory')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "websiteManagedIdentity",
+                "sid": "758ef29e-8134-453a-831d-e69f37b9e603",
+                "tenantId": "5f50d5ca-3903-4a05-abb5-28f509b56b3c"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advancedThreatProtectionSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/auditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/azureADOnlyAuthentications",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "azureADOnlyAuthentication": true
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/connectionPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/default')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "connectionType": "Default"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "tags": {
+                "Environment": "Test",
+                "Location": "West Europe",
+                "Organization": "SAT PFA",
+                "Project": "PluralSight",
+                "Purpose": "Learning"
+            },
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/3b4e37d3-b3bc-4d14-b7cc-542c313518f7/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false,
+                "availabilityZone": "NoPreference"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/master/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/devOpsAuditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/encryptionProtector",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyName": "ServiceManaged",
+                "serverKeyType": "ServiceManaged",
+                "autoRotationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/extendedAuditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "isManagedIdentityInUse": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/keys",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ServiceManaged')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "kind": "servicemanaged",
+            "properties": {
+                "serverKeyType": "ServiceManaged"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/securityAlertPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/sqlVulnerabilityAssessments",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/vulnerabilityAssessments",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        },
+        
+        {
+            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/CreateIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/DbParameterization')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/DefragmentIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/DropIndex')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/advisors",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/ForceLastGoodPlan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "autoExecuteValue": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "auditingState": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/auditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "weeklyRetention": "PT0S",
+                "monthlyRetention": "PT0S",
+                "yearlyRetention": "PT0S",
+                "weekOfYear": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 7,
+                "diffBackupIntervalInHours": 24
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/extendedAuditingSettings",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/vulnerabilityAssessments",
+            "apiVersion": "2023-08-01-preview",
+            "name": "[concat(parameters('servers_aspfa_sqlserver_test_name'), '/ASPFA-Database/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('servers_aspfa_sqlserver_test_name'), 'ASPFA-Database')]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_aspfa_sqlserver_test_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                }
+            }
+        }
+    ]
+}
