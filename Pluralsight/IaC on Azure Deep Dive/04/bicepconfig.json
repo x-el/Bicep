@@ -1,0 +1,10 @@
+{
+    "moduleAliases": {
+        "ts": {},
+        "br": {
+            "aspfa": {
+                "registry": "aspfatestlearnpsweacr.azurecr.io"
+            }
+        }
+    }
+}

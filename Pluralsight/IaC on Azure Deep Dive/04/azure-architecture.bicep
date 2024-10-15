@@ -33,7 +33,7 @@ import { websiteConfigurationSettingsType } from 'modules/appService.bicep'
 
 // MODULES
 
-module applicationInsightsModule 'br:aspfatestlearnpsweacr.azurecr.io/bicep/modules/applicationsinsights:v1' = {
+module applicationInsightsModule 'br/aspfa:bicep/modules/applicationsinsights:v1' = {
   name: 'applicationInsights' // each module Deployment needs a name, because the module will translate into an individual Deployment in Azure
   params: {
       environmentName: environmentName
@@ -43,7 +43,7 @@ module applicationInsightsModule 'br:aspfatestlearnpsweacr.azurecr.io/bicep/modu
     }
 }
 
-module appServiceModule 'br:aspfatestlearnpsweacr.azurecr.io/bicep/modules/appservice:v2' = {
+module appServiceModule 'br/aspfa:bicep/modules/appservice:v2' = {
   name: 'appServiceDeploment'
   params: {
     aspTier: aspTier
@@ -54,7 +54,7 @@ module appServiceModule 'br:aspfatestlearnpsweacr.azurecr.io/bicep/modules/appse
   }
 }
 
-module sqlDatabaseModule 'br:aspfatestlearnpsweacr.azurecr.io/bicep/modules/sqldatabase:v1' = {
+module sqlDatabaseModule 'br/aspfa:bicep/modules/sqldatabase:v1' = {
 name: 'sqlDatabaseDeployment'
 params: {
   environmentName: environmentName
