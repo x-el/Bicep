@@ -55,7 +55,7 @@ resource website 'Microsoft.Web/sites@2023-12-01' = {
   properties: {
     serverFarmId:serverFarm.id
     siteConfig: {
-      alwaysOn: true
+      alwaysOn: true // v2 feature
     }
   }
   identity: {
