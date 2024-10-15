@@ -1,6 +1,11 @@
 {
     "moduleAliases": {
-        "ts": {},
+        "ts": {
+            "aspfa": {
+                "subscription": "3b4e37d3-b3bc-4d14-b7cc-542c313518f7",
+                "resourceGroup": "Test-Learn-PS-WE"
+            }
+        },
         "br": {
             "aspfa": {
                 "registry": "aspfatestlearnpsweacr.azurecr.io"
