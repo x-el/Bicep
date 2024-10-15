@@ -33,7 +33,7 @@ import { websiteConfigurationSettingsType } from 'modules/appService.bicep'
 
 // MODULES
 
-module applicationInsightsModule 'br/aspfa:bicep/modules/applicationsinsights:v1' = {
+module applicationInsightsModule 'ts:3b4e37d3-b3bc-4d14-b7cc-542c313518f7/Test-Learn-PS-WE/applicationInsights:1.1' = {
   name: 'applicationInsights' // each module Deployment needs a name, because the module will translate into an individual Deployment in Azure
   params: {
       environmentName: environmentName
@@ -54,7 +54,7 @@ module appServiceModule 'br/aspfa:bicep/modules/appservice:v2' = {
   }
 }
 
-module sqlDatabaseModule 'br/aspfa:bicep/modules/sqldatabase:v1' = {
+module sqlDatabaseModule 'ts:3b4e37d3-b3bc-4d14-b7cc-542c313518f7/Test-Learn-PS-WE/sqlDatabase:1.0' = {
 name: 'sqlDatabaseDeployment'
 params: {
   environmentName: environmentName
