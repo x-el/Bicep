@@ -43,7 +43,7 @@ module applicationInsightsModule 'ts/aspfa:applicationInsights:1.1' = {
     }
 }
 
-module appServiceModule 'br/aspfa:bicep/modules/appservice:v2' = {
+module appServiceModule 'br/aspfa:bicep/modules/appservice:v1' = {
   name: 'appServiceDeploment'
   params: {
     aspTier: aspTier
