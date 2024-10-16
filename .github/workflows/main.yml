@@ -9,7 +9,6 @@ steps:
 
 - name: Checkout IaC
 uses: actions/checkout@main
-
 - name: Log into Azure
 uses: azure/login@v1
 with:
