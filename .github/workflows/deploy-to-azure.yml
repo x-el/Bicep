@@ -31,9 +31,9 @@ jobs:
 
       - name: Deploy Bicep File
       - uses: azure/arm-deploy@v1
-  			with:
-  				subscriptionId: 
-  				resourceGroupName: 
-  				template: ./azure-architecture.bicep
-  				parameters: ./azure-architecture-test.bicepparam
-  				failonStdErr: false
+        with:
+          subscriptionId: 
+          resourceGroupName: 
+          template: ./azure-architecture.bicep
+          parameters: ./azure-architecture-test.bicepparam
+          failonStdErr: false
