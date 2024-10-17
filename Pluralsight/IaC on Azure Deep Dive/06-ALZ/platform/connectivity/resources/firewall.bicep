@@ -52,7 +52,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2024-01-01' = { // Firewall 
         rules: [{
           name: 'allow-outbound-to-internet'
           protocols: ['any']
-          sourceAddresses: ['10.1.101.4']
+          sourceAddresses: ['10.11.101.4']
           destinationAddresses: ['*']
           destinationPorts: ['*']
         }]
