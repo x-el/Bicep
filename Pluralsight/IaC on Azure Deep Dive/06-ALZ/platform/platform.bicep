@@ -1,19 +1,20 @@
 // PARAMETERS
 param resourceLocation string
 param loglogAnalayticsWorkspaceName string
-
+param managementRgName string
+param connectivityRgName string
 
 
 // RESOURCE GROUPS
 
 targetScope = 'subscription' // default is 'resourceGroup'
 resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-01' = {
-  name: 'Test-PS-Bicep-management'
+  name: managementRgName
   location: resourceLocation
 }
 
 resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-01' = {
-  name: 'Test-PS-Bicep-connectivity'
+  name: connectivityRgName
   location: resourceLocation
 }
 
@@ -35,5 +36,7 @@ module connectivityResourcesDeployment 'connectivity/connectivity.bicep' ={
   name: 'connectivityResourcesDeployment'
   params: {
     resourceLocation: resourceLocation
+    logAnalyticsWorkspaceName: loglogAnalayticsWorkspaceName
+    managementRgName: managementRgName
   }
 }

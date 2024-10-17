@@ -39,8 +39,8 @@ module firewallDeploymment 'resources/firewall.bicep' = {
     firewallSubnetName: firewallSubnetName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     managementRgName: managementRgName
-  dependsOn: [ virtualNetworkDeployment ] // explicit dependency declaration
   }
+  dependsOn: [ virtualNetworkDeployment ] // explicit dependency declaration
 }
 
 
