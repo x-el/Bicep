@@ -1,6 +1,7 @@
 // PARAMETERS
 param resourceLocation string
-
+param logAnalyticsWorkspaceName string
+param managementRgName string
 
 
 // VARIABLES
@@ -30,6 +31,17 @@ module bastionDeployment 'resources/bastion.bicep' = {
   dependsOn: [ virtualNetworkDeployment ] // explicit dependency declaration
 }
 
+module firewallDeploymment 'resources/firewall.bicep' = {
+  name: 'firewallDeployment'
+  params: {
+    resourceLocation: resourceLocation
+    virtualNetworkName: vnetName
+    firewallSubnetName: firewallSubnetName
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    managementRgName: managementRgName
+  dependsOn: [ virtualNetworkDeployment ] // explicit dependency declaration
+  }
+}
 
 
 // RESOURCES

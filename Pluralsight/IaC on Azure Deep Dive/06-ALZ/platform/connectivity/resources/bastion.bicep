@@ -7,7 +7,7 @@ param bastionSubnetName string
 
 // RESOURCES
 
-resource publicIp 'Microsoft.Network/publicIPAddresses@2024-01-01' = { // Public IP creation
+resource bastionPublicIp 'Microsoft.Network/publicIPAddresses@2024-01-01' = { // Public IP creation
   name: 'bastion-pip'
   sku: {
     name: 'Standard'
@@ -35,7 +35,7 @@ resource bastionHost 'Microsoft.Network/bastionHosts@2024-01-01' = { // creating
           id: virtualNetwork::bastionSubnet.id
         }
         publicIPAddress: {
-          id: publicIp.id
+          id: bastionPublicIp.id
         }
       }
     }]

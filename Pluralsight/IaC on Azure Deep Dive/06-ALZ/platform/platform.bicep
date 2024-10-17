@@ -1,6 +1,6 @@
 // PARAMETERS
-
-param resourceLocation string = 'westeurope'
+param resourceLocation string
+param loglogAnalayticsWorkspaceName string
 
 
 
@@ -26,6 +26,7 @@ module managementResourcesDeployment 'management/management.bicep' ={
   name: 'managementResourcesDeployment'
   params: {
     resourceLocation: resourceLocation
+    logAnalayticsWorkspaceName: loglogAnalayticsWorkspaceName
   }
 }
 
