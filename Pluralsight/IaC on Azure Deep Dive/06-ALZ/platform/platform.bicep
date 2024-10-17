@@ -16,3 +16,14 @@ resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-0
   name: 'Test-PS-Bicep-connectivity'
   location: resourceLocation
 }
+
+
+
+// MODULES
+module managementResourcesDeployment 'management/management.bicep' ={
+  scope: managementResourceGroup
+  name: 'managementResourcesDeployment'
+  params: {
+    resourceLocation: resourceLocation
+  }
+}
