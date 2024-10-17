@@ -1,0 +1,1 @@
+[ All resources/files needed for the default landing zone Bicep template ]
