@@ -74,7 +74,7 @@ resource  routeTable 'Microsoft.Network/routeTables@2024-01-01' = {
     routes: [{
       name: 'defaultRoute'
       properties: {
-        addressPrefix: '0.0.0.0' // determines to which traffic this route applies; 0.0.0.0 means all traffic
+        addressPrefix: '0.0.0.0/0' // determines to which traffic this route applies; 0.0.0.0/0 means all traffic
         hasBgpOverride: false // BGP override not possible
         nextHopIpAddress: '10.10.10.4' // Firewall IP address
         nextHopType: 'VirtualAppliance'
