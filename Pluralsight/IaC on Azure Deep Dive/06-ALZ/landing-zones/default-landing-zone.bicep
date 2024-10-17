@@ -4,8 +4,8 @@ targetScope = 'subscription'
 param resourceLocation string
 param productName string
 param spokeNumber string
-param connectivityRgName string
-param hubNetworkName string
+param connectivityRgName string = 'Test-PS-Bicep-connectivity'
+param hubNetworkName string = 'aspfa-test-ps-bicep-hub'
 
 
 
