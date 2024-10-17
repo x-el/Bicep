@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.managaement.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceLocation": {
+            "value": "westeurope"
+        },
+        "productName": {
+            "value": "product3"
+        },
+        "spokeNumber": {
+            "value": "103"
+        }
+    }
+}
