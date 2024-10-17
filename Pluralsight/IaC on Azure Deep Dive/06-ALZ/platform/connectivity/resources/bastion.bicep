@@ -16,3 +16,28 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2024-01-01' = { // Public
     publicIPAllocationMethod: 'Static'
   }
 }
+
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' existing = { // calling the existing/previously created VNET
+  name: virtualNetworkName
+  resource bastionSubnet 'subnets@2024-01-01' existing = {
+    name: bastionSubnetName
+  }
+}
+
+resource bastionHost 'Microsoft.Network/bastionHosts@2024-01-01' = { // creating the Bastion Host itself
+  name: 'bastion-host'
+  location: resourceLocation
+  properties: {
+    ipConfigurations: [{ // each BH can have multiple IP configurations, specified as an Array object
+      name: 'ipConfiguration'
+      properties: {
+        subnet: {
+          id: virtualNetwork::bastionSubnet.id
+        }
+        publicIPAddress: {
+          id: publicIp.id
+        }
+      }
+    }]
+  }
+}

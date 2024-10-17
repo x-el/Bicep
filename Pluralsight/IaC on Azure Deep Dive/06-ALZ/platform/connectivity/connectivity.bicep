@@ -6,7 +6,7 @@ param resourceLocation string
 // VARIABLES
 var vnetName = 'aspfa-test-ps-bicep-hub'
 var firewallSubnetName = 'AzureFirewallSubnet'
-var  bastionSubnetName = 'AzureBastionSubnet'
+var bastionSubnetName = 'AzureBastionSubnet'
 
 // MODULES
 
@@ -18,6 +18,16 @@ module virtualNetworkDeployment 'resources/virtual-network.bicep' = {
     firewallSubnetName: firewallSubnetName
     bastionSubnetName: bastionSubnetName
   }
+}
+
+module bastionDeployment 'resources/bastion.bicep' = {
+  name: 'bastionDeployment'
+  params: {
+    resourceLocation: resourceLocation
+    virtualNetworkName: vnetName
+    bastionSubnetName: bastionSubnetName
+  }
+  dependsOn: [ virtualNetworkDeployment ] // explicit dependency declaration
 }
 
 
