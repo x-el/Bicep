@@ -11,6 +11,7 @@ param managementRgName string
 
 resource firewallPublicIp 'Microsoft.Network/publicIPAddresses@2024-01-01' = { // Public IP creation
   name: 'firewall-pip'
+  location: resourceLocation
   sku: {
     name: 'Standard'
   }

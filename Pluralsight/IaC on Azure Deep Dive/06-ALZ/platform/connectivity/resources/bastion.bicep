@@ -9,6 +9,7 @@ param bastionSubnetName string
 
 resource bastionPublicIp 'Microsoft.Network/publicIPAddresses@2024-01-01' = { // Public IP creation
   name: 'bastion-pip'
+  location: resourceLocation
   sku: {
     name: 'Standard'
   }
