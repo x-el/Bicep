@@ -23,9 +23,13 @@ provider "azurerm" {
   features {
   }
 }
+
+
+
 #############################################################################
 # DATA
 #############################################################################
+
 
 
 #############################################################################
@@ -37,6 +41,7 @@ variable "resourceLocation" {
 variable "resourceGroupName" {
   default = "Test-PS-Bicep-102-product2"
 }
+
 
 
 #############################################################################
@@ -68,7 +73,7 @@ resource "random_password" "password" {   // creating a randomly generated passw
   special = true
 }
 resource "azurerm_windows_virtual_machine" "main" {    // create the VM itself
-  name = "aspfa-test-ps-bicep-terraformVM"
+  name = "terraformVM"
   admin_username = "babasha"
   admin_password = random_password.password.result
   location = var.resourceLocation
