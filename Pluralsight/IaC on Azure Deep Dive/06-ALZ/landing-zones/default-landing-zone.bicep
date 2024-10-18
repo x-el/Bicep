@@ -15,7 +15,7 @@ var spokeRgName = 'Test-PS-Bicep-${spokeNumber}-${productName}'
 
 // RESOURCES
 
-resource spokeResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-01' = {
+resource spokeResourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: spokeRgName
   location: resourceLocation
 }
