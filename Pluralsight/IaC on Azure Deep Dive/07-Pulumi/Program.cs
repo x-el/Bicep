@@ -26,7 +26,18 @@ return await Pulumi.Deployment.RunAsync(() =>
     });
 
     // Create VNIC
-    
+    var networkInterface = new Pulumi.AzureNative.Network.networkInterface("network-interface", new(){
+        ResourceGroupName = ResourceGroup.Name,
+        IpConfigurations = new[] {
+            new Pulumi.AzureNative.Netowrk.Inputs.NetworkInterfaceIPConfigurationArgs {
+                nameof = "pulumi-nic-ipconfiguration",
+                PrivateIPAllocationMethod = Pulumi.AzureNative.PrivateIPAllocationMethod.Dynamic,
+                subnet = new Pulumi.AzureNative.Network.Inputs.SubnetArgs {
+                    Id = subnet.Id
+                }
+            }
+        }
+    });
 
     // Create VM
 });
