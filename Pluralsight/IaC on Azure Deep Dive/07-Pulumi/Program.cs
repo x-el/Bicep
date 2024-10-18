@@ -40,4 +40,41 @@ return await Pulumi.Deployment.RunAsync(() =>
     });
 
     // Create VM
+    var vm = new Pulumi.AzureNative.Compute.VirtualMachine ("vm", new(){
+        ResourceGroupName = ResourceGroup.Name,
+        NetworkProfile = new Pulumi.AzureNativeCompute.Inputs.NetworkProfileArgs {
+            networkInterfaces = new[] {
+                new Pulumi.AzureNative.Compute.Inputs.NetworkInterfaceIPConfigurationArgs {
+                    id = networkInterface.Id,
+                    Primary = true
+                },
+            },
+        },
+
+        HardwareProfile = new Pulumi.AzureNative.Compute.Inputs.HardwareProfileArgs {
+            VmSize = "Standard_B2s"
+        },
+
+        OsProfile = new Pulumi.AzureNative.Compute.Inputs.OsProfileArgs {
+            ComputerName = "pulumi-vm"
+            AdminUsername = "babasha"
+            AdminPassword = new Pulumi.Random.RandomPassword("password", new() {
+                Length = 16,
+                Special = true
+            }).Result
+        },
+
+        StorageProfile = new Pulumi.AzureNative.Compute.Input.StorageProfileArgs {
+            OsDisk = new Pulumi.AzureNative.Compute.Inputs.OsDiskARgs {
+                Name = "pulumi-vm-osdisk"
+                CreateOption = Pulumi.AzureNative.Compute.DiskCreateOptionTypes.FromImage,
+            },
+            ImageReference = new Pulumi.AzureNative.Compute.Inputs.ImageReferenceArgs {
+                Publisher = "MicrosoftWIndowsServer",
+                Offer = "WindowsServer",
+                Sku = "2022-datacenter-azure-edition",
+                Version = "latest",
+            },
+        },
+    });
 });
