@@ -8,12 +8,12 @@ param connectivityRgName string
 // RESOURCE GROUPS
 
 targetScope = 'subscription' // default is 'resourceGroup'
-resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-01' = {
+resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: managementRgName
   location: resourceLocation
 }
 
-resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-08-01' = {
+resource connectivityResourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: connectivityRgName
   location: resourceLocation
 }
