@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pluralsight", "Pluralsight", "{73F5E05D-6268-4595-8F13-013D689B7079}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IaC on Azure Deep Dive", "IaC on Azure Deep Dive", "{F91291B6-0756-4452-BF72-B0F9C112CB52}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ps-bicep-iacoadd", "Pluralsight\IaC on Azure Deep Dive\07-Pulumi\ps-bicep-iacoadd.csproj", "{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F91291B6-0756-4452-BF72-B0F9C112CB52} = {73F5E05D-6268-4595-8F13-013D689B7079}
+		{AEF9DB01-AF4C-4F75-B825-7F413AF1DBC4} = {F91291B6-0756-4452-BF72-B0F9C112CB52}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD693E13-2ABF-4A25-94DC-B3BF42D2C78C}
+	EndGlobalSection
+EndGlobal
