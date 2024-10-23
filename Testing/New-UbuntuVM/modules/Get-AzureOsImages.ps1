@@ -15,7 +15,7 @@ $availableOffers = Get-AzVMImageOffer -Location $resourceLocation -PublisherName
 ForEach ($currentOffer in $availableOffers) {
     $currentSkus = Get-AzVMImageSku -Location $resourceLocation -PublisherName $publisherName -Offer $currentOffer.Offer
     ForEach ($currentSku in $currentSkus) {
-        if (($OsType -eq "Linux") -and ($currentSku.Skus -like "*24*-lts-gen2")) {
+        if (($OsType -eq "Linux") -and ($currentSku.Skus -like "*-lts-gen2")) {
             $currentSku | Format-Table Skus,Offer -AutoSize
         }
         else {
