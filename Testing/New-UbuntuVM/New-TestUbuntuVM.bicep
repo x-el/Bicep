@@ -1,5 +1,7 @@
+// PARAMETERS
+
 @description('The name of the target Resource Group.')
-param resourceGroupName string = 'Test-Learn-PS-WE'
+param resourceGroupName string = 'Test-Learn-Bicep-WE'
 
 @description('The name of the network infrastructure Resource Group.')
 param networkResourceGroupName string = 'Test-Core-Net-WE'
@@ -16,10 +18,6 @@ param adminUsername string
   'password'
 ])
 param authenticationType string = 'password'
-
-@description('SSH Key or password for the Virtual Machine. SSH key is recommended.')
-@secure()
-param adminPasswordOrKey string
 
 @description('Unique DNS Name for the Public IP used to access the Virtual Machine.')
 param dnsLabelPrefix string = toLower('${vmName}-${uniqueString(resourceGroup().id)}')
@@ -49,6 +47,13 @@ param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
   'TrustedLaunch'
 ])
 param securityType string = 'TrustedLaunch'
+
+@description('SSH Key or password for the Virtual Machine. SSH key is recommended.')
+@secure()
+param adminPasswordOrKey string
+
+
+// VARIABLES
 
 var imageReference = {
   'Ubuntu-2004': {
@@ -91,6 +96,10 @@ var extensionPublisher = 'Microsoft.Azure.Security.LinuxAttestation'
 var extensionVersion = '1.0'
 var maaTenantName = 'GuestAttestation'
 var maaEndpoint = substring('emptystring', 0, 0)
+
+
+
+// RESOURCES
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' existing = {
   name: virtualNetworkName
@@ -198,6 +207,10 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-09-01' =
     }
   }
 }
+
+
+
+// OUTPUTS
 
 output adminUsername string = adminUsername
 output hostname string = publicIPAddress.properties.dnsSettings.fqdn
