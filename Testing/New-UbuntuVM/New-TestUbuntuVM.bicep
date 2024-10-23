@@ -24,6 +24,8 @@ param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
 // var currentTime = utcNow(HHmmss)
 var currentTime = '123456'
+// var randomString = uniqueString(vmBaseName)
+// var randomShortString = substring(randomString,0,6)
 var vmName = '${vmBaseName}-${currentTime}'
 var publicIPAddressName = '${vmName}-PublicIP'
 var dnsLabelPrefix = toLower('${vmName}-${uniqueString(resourceGroup().id)}')
