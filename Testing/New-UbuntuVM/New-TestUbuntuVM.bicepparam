@@ -8,7 +8,7 @@ using 'New-TestUbuntuVM.bicep'
 param networkResourceGroupName = 'Test-Core-Net-WE'
 
 @description('The name of your Virtual Machine.')
-param vmName  = 'UbuntuVM'
+param vmBaseName  = 'UbuntuVM'
 
 @description('Username for the Virtual Machine.')
 param adminUsername = 'gica'

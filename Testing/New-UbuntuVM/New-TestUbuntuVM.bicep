@@ -4,7 +4,7 @@
 param networkResourceGroupName string = 'Test-Core-Net-WE'
 
 @description('The name of your Virtual Machine.')
-param vmName string = 'UbuntuVM'
+param vmBaseName string = 'UbuntuVM'
 
 @description('Username for the Virtual Machine.')
 param adminUsername string
@@ -22,6 +22,9 @@ param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
 // VARIABLES
 
+// var currentTime = utcNow(HHmmss)
+var currentTime = '123456'
+var vmName = '${vmBaseName}-${currentTime}'
 var publicIPAddressName = '${vmName}-PublicIP'
 var dnsLabelPrefix = toLower('${vmName}-${uniqueString(resourceGroup().id)}')
 var networkInterfaceName = '${vmName}-VNIC'
@@ -29,9 +32,6 @@ var networkInterfaceId = networkInterface.id
 var resourceLocation = resourceGroup().location
 var passwordAkvName = 'aspfatestbicepwest'
 var passwordSecretName = 'ubuntu-vm-password'
-// var currentTime = utcNow(HHmmss)
-// var currentTime = '123456'
-// var actualVmName = '${vmName}-${currentTime}'
 
 
 
@@ -114,3 +114,4 @@ module ubuntuVmModule 'modules/ubuntuVM.bicep' = {
 output adminUsername string = adminUsername
 output hostname string = publicIPAddress.properties.dnsSettings.fqdn
 output sshCommand string = 'ssh ${adminUsername}@${publicIPAddress.properties.dnsSettings.fqdn}'
+output generatedVmName string = vmName
