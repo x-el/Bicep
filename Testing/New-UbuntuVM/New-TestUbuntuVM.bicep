@@ -9,26 +9,6 @@ param vmName string = 'UbuntuVM'
 @description('Username for the Virtual Machine.')
 param adminUsername string
 
-@description('Type of authentication to use on the Virtual Machine. SSH key is recommended.')
-@allowed([
-  'sshPublicKey'
-  'password'
-])
-param authenticationType string = 'password'
-
-@description('Unique DNS Name for the Public IP used to access the Virtual Machine.')
-param dnsLabelPrefix string = toLower('${vmName}-${uniqueString(resourceGroup().id)}')
-
-@description('The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version.')
-@allowed([
-  'Ubuntu-2004'
-  'Ubuntu-2204'
-])
-param ubuntuOSVersion string = 'Ubuntu-2204'
-
-@description('Location for all resources.')
-param location string = resourceGroup().location
-
 @description('The size of the VM')
 param vmSize string = 'Standard_B2s'
 
@@ -38,65 +18,28 @@ param virtualNetworkName string = 'Test-WE-VNet01'
 @description('Name of the Network Security Group')
 param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
-@description('Security Type of the Virtual Machine.')
-@allowed([
-  'Standard'
-  'TrustedLaunch'
-])
-param securityType string = 'TrustedLaunch'
-
-@description('SSH Key or password for the Virtual Machine. SSH key is recommended.')
-@secure()
-param adminPasswordOrKey string
 
 
 // VARIABLES
 
-var imageReference = {
-  'Ubuntu-2004': {
-    publisher: 'Canonical'
-    offer: '0001-com-ubuntu-server-focal'
-    sku: '20_04-lts-gen2'
-    version: 'latest'
-  }
-  'Ubuntu-2204': {
-    publisher: 'Canonical'
-    offer: '0001-com-ubuntu-server-jammy'
-    sku: '22_04-lts-gen2'
-    version: 'latest'
-  }
-}
 var publicIPAddressName = '${vmName}-PublicIP'
+var dnsLabelPrefix = toLower('${vmName}-${uniqueString(resourceGroup().id)}')
 var networkInterfaceName = '${vmName}-VNIC'
-var osDiskName = '${vmName}-OsDisk'
-var osDiskType = 'Standard_LRS'
-var linuxConfiguration = {
-  disablePasswordAuthentication: true
-  ssh: {
-    publicKeys: [
-      {
-        path: '/home/${adminUsername}/.ssh/authorized_keys'
-        keyData: adminPasswordOrKey
-      }
-    ]
-  }
-}
-var securityProfileJson = {
-  uefiSettings: {
-    secureBootEnabled: true
-    vTpmEnabled: true
-  }
-  securityType: securityType
-}
-var extensionName = 'GuestAttestation'
-var extensionPublisher = 'Microsoft.Azure.Security.LinuxAttestation'
-var extensionVersion = '1.0'
-var maaTenantName = 'GuestAttestation'
-var maaEndpoint = substring('emptystring', 0, 0)
+var networkInterfaceId = networkInterface.id
+var resourceLocation = resourceGroup().location
+var passwordAkvName = 'aspfatestbicepwest'
+var passwordSecretName = 'ubuntu-vm-password'
+// var currentTime = utcNow(HHmmss)
+// var currentTime = '121314'
+// var actualVmName = '${vmName}-${currentTime}'
 
 
 
 // RESOURCES
+
+resource passwordKeyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
+  name: passwordAkvName
+}
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-09-01' existing = {
   name: virtualNetworkName
@@ -110,7 +53,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-09-0
 
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
   name: publicIPAddressName
-  location: location
+  location: resourceLocation
   tags: resourceGroup().tags
   sku: {
     name: 'Basic'
@@ -127,7 +70,7 @@ resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2023-09-01' = {
   name: networkInterfaceName
-  location: location
+  location: resourceLocation
   properties: {
     ipConfigurations: [
       {
@@ -149,59 +92,18 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2023-09-01' = {
   }
 }
 
-resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
-  name: vmName
-  location: location
-  tags: resourceGroup().tags
-  properties: {
-    hardwareProfile: {
-      vmSize: vmSize
-    }
-    storageProfile: {
-      osDisk: {
-        createOption: 'FromImage'
-        managedDisk: {
-          storageAccountType: osDiskType
-        }
-        name: osDiskName
-      }
-      imageReference: imageReference[ubuntuOSVersion]
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: networkInterface.id
-        }
-      ]
-    }
-    osProfile: {
-      computerName: vmName
-      adminUsername: adminUsername
-      adminPassword: adminPasswordOrKey
-      linuxConfiguration: ((authenticationType == 'password') ? null : linuxConfiguration)
-    }
-    securityProfile: (securityType == 'TrustedLaunch') ? securityProfileJson : null
-  }
-}
 
-resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-09-01' = if (securityType == 'TrustedLaunch' && securityProfileJson.uefiSettings.secureBootEnabled && securityProfileJson.uefiSettings.vTpmEnabled) {
-  parent: vm
-  name: extensionName
-  location: location
-  properties: {
-    publisher: extensionPublisher
-    type: extensionName
-    typeHandlerVersion: extensionVersion
-    autoUpgradeMinorVersion: true
-    enableAutomaticUpgrade: true
-    settings: {
-      AttestationConfig: {
-        MaaSettings: {
-          maaEndpoint: maaEndpoint
-          maaTenantName: maaTenantName
-        }
-      }
-    }
+
+// MODULES
+
+module ubuntuVmModule 'modules/ubuntuVM.bicep' = {
+  name: 'ubuntuVM'
+  params: {
+    adminUsername: adminUsername
+    vmName: vmName
+    vmSize: vmSize
+    networkInterfaceId: networkInterfaceId
+    adminPasswordOrKey: passwordKeyVault.getSecret(passwordSecretName)
   }
 }
 
