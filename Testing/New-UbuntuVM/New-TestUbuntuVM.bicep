@@ -4,7 +4,7 @@
 param networkResourceGroupName string = 'Test-Core-Net-WE'
 
 @description('The name of your Virtual Machine.')
-param vmBaseName string = 'UbuntuVM'
+param vmBaseName string
 
 @description('Username for the Virtual Machine.')
 param adminUsername string
