@@ -18,12 +18,13 @@ param virtualNetworkName string = 'Test-WE-VNet01'
 @description('Name of the Network Security Group')
 param networkSecurityGroupName string = 'ASPFA-Test-WE-NSG'
 
+@description('Using the current time to generate an unique VM name')
+param currentTime string = utcNow('HHmmss')
+
 
 
 // VARIABLES
 
-// var currentTime = utcNow(HHmmss)
-var currentTime = '123456'
 // var randomString = uniqueString(vmBaseName)
 // var randomShortString = substring(randomString,0,6)
 var vmName = '${vmBaseName}-${currentTime}'
