@@ -1,8 +1,5 @@
 // PARAMETERS
 
-@description('The name of the target Resource Group.')
-param resourceGroupName string = 'Test-Learn-Bicep-WE'
-
 @description('The name of the network infrastructure Resource Group.')
 param networkResourceGroupName string = 'Test-Core-Net-WE'
 

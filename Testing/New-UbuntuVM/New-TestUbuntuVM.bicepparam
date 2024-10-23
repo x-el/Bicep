@@ -4,9 +4,6 @@ using 'New-TestUbuntuVM.bicep'
 
 // PARAMETERS
 
-@description('The name of the target Resource Group.')
-param resourceGroupName = 'Test-Learn-Bicep-WE'
-
 @description('The name of the network infrastructure Resource Group.')
 param networkResourceGroupName = 'Test-Core-Net-WE'
 
@@ -14,7 +11,7 @@ param networkResourceGroupName = 'Test-Core-Net-WE'
 param vmName  = 'UbuntuVM'
 
 @description('Username for the Virtual Machine.')
-param adminUsername =
+param adminUsername = 'gica'
 
 @description('Type of authentication to use on the Virtual Machine. SSH key is recommended.')
 @allowed([
@@ -45,6 +42,7 @@ param adminPasswordOrKey = az.getSecret(subscriptionId,resourceGroupName,passwor
 
 // VARIABLES 
 
+var resourceGroupName = 'Test-Learn-Bicep-WE' // should be dynamic
 var passwordAkvName = 'aspfatestbicepwest'
 var passwordSecretName = 'ubuntu-vm-password'
-var subscriptionId = '3b4e37d3-b3bc-4d14-b7cc-542c313518f7' 
+var subscriptionId = '3b4e37d3-b3bc-4d14-b7cc-542c313518f7' //should be dynamic
