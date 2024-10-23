@@ -30,7 +30,7 @@ var resourceLocation = resourceGroup().location
 var passwordAkvName = 'aspfatestbicepwest'
 var passwordSecretName = 'ubuntu-vm-password'
 // var currentTime = utcNow(HHmmss)
-// var currentTime = '121314'
+// var currentTime = '123456'
 // var actualVmName = '${vmName}-${currentTime}'
 
 
